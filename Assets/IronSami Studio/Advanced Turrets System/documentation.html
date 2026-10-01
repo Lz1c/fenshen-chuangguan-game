@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang='en'>
+<head>
+<meta charset='UTF-8'>
+<title>Advanced Turret AI System Documentation</title>
+<style>body{font-family:Arial,Helvetica,sans-serif;margin:20px;line-height:1.6;}h1,h2{color:#2c3e50;}code{background:#ecf0f1;padding:2px 4px;border-radius:4px;} .option-table{border-collapse:collapse;width:100%;}.option-table th,.option-table td{border:1px solid #ccc;padding:6px 8px;text-align:left;}.option-table th{background:#f5f5f5;}</style>
+</head>
+<body>
+<h1>Advanced Turret AI System</h1>
+<p><a href='https://discord.gg/MapKXwNeDz'>Join the Discord Community</a> • <a href='https://ironsami-studio.gitbook.io/advanced-turret-system'>Full Documentation</a></p>
+<h2>Overview</h2>
+<p>The Advanced Turret AI System lets you drop‑in intelligent <strong>turrets, tanks, and defense systems</strong> without writing a single line of code. Everything – range, line‑of‑sight, predictive aiming, projectile or raycast fire, obstacle checks, gizmos – is handled for you.</p>
+<h2>Support</h2>
+<p>Need help? <a href='https://discord.gg/MapKXwNeDz'>Hop on our Discord</a> and post in <code>#turret-ai-support</code>.</p>
+<p>Read the <a href='https://ironsami-studio.gitbook.io/advanced-turret-system'>Full Documentation</a> online.</p>
+<h2>Key Features</h2>
+<ul>
+<li>Zero‑code setup via the <em>Turret Creator</em> menu.</li>
+<li>Projectile or raycast firing modes, with predictive lead‑targeting.</li>
+<li>3D audio with single or randomized shot sounds.</li>
+<li>Visual gizmos for range, fire cone, spawn points, obstacle rays.</li>
+<li>Extensible events (<code>UnityEvent</code>) for full control.</li>
+</ul>
+<h2>Quick Start</h2>
+<ol>
+<li><strong>Install</strong> the package into your project.</li>
+<li><strong>Create a turret:</strong> <code>GameObject ▸ Turret ▸ Create Single/Double Barrel Turret</code>. The prefab is dropped into the scene fully wired up.</li>
+<li><strong>Press Play</strong> – the turret will seek anything tagged <code>Enemy</code>. Add the included <code>LinearPingPongMover</code> script to a capsule to see it track a moving target.</li>
+</ol>
+<h3>Required Components</h3>
+<p>Each turret root needs <code>TurretController</code> <em>and</em> <code>TurretSoundManager</code>. Those are added automatically by the creator, but you can add them manually from <em>Components ▸ Advanced Turret AI</em>.</p>
+<h3>Turret Workflow</h3>
+<ol>
+<li>Assign a <strong>Projectile Prefab</strong> (or leave default for raycast mode).</li>
+<li>Optionally drop in a <strong>Trail VFX</strong> prefab for raycast shots and a <strong>Muzzle Decal</strong> prefab for muzzle flashes.</li>
+<li>Tweak <strong>Range</strong>, <strong>Fire Rate</strong>, and <strong>Damage</strong> in the inspector.</li>
+<li>Use the in‑scene gizmos to validate spawn points, detection cone, and obstacle checks.</li>
+</ol>
+<h2>Inspector Reference (TurretController)</h2>
+<table class='option-table'>
+<thead><tr><th>Category</th><th>Property</th><th>Description</th></tr></thead>
+<tbody>
+<tr><td>Turret</td><td>Turret Head</td><td>Transform that rotates. Defaults to root if null.</td></tr>
+<tr><td></td><td>Rotation Speed</td><td>Degrees per second.</td></tr>
+<tr><td></td><td>Damage</td><td>Damage sent to <code>HealthSystem</code>.</td></tr>
+<tr><td></td><td>Fire Rate</td><td>Shots per second.</td></tr>
+<tr><td>Detection</td><td>Range Radius</td><td>Spherical trigger radius (also draws a gizmo).</td></tr>
+<tr><td></td><td>Cone Detection</td><td>Enable a forward cone instead of full sphere.</td></tr>
+<tr><td>Firing</td><td>Firing Mode</td><td>Sequential (cycling spawn points) or Simultaneous.</td></tr>
+<tr><td></td><td>Shoot Mode</td><td>Projectile (physical) or Raycast (instant).</td></tr>
+<tr><td></td><td>Max Angle Deviation</td><td>How precisely the head must align before firing.</td></tr>
+<tr><td>Obstacle Check</td><td>Enable Obstacle Check</td><td>Skip shots blocked by <code>obstacleLayerMask</code>.</td></tr>
+<tr><td>VFX</td><td>Muzzle Light</td><td>Optional light flash on fire.</td></tr>
+</tbody>
+</table>
+<h3>TurretSoundManager</h3>
+<ul>
+<li><strong>Single Shot Sound</strong> – one clip played every shot.</li>
+<li><strong>Use Random Sounds</strong> – toggle to pick a random clip from <em>Random Shot Sounds</em> each fire.</li>
+<li><strong>Spatial Blend / Max Distance</strong> – standard 3D audio controls.</li>
+</ul>
+<h3>TurretProjectile</h3>
+<ul>
+<li><strong>Mode:</strong> Directional (straight) or Homing.</li>
+<li><strong>Speed / LifeTime</strong> – self‑destruct after <em>LifeTime</em>.</li>
+<li><strong>Collision Layers</strong> – layers that register a hit.</li>
+<li><strong>UnityEvent enemyHit(GameObject enemy, float damage)</strong> provided for custom FX.</li>
+</ul>
+<h2>Example: Creating a Homing Missile Turret</h2>
+<ol>
+<li>Duplicate the default projectile prefab, change <strong>Mode</strong> to <em>Homing</em>, <strong>Speed</strong> to 30.</li>
+<li>Set turret <strong>Shoot Mode</strong> to <em>Projectile</em> and assign your new missile prefab.</li>
+<li>Increase <strong>Max Angle Deviation</strong> to allow easier firing.</li>
+</ol>
+<h2>Troubleshooting</h2>
+<ul>
+<li><em>Turret doesn’t rotate</em> – ensure <code>_targetEnemy</code> exists and <code>enemyTag</code> matches.</li>
+<li><em>No bullets spawn</em> – add at least one <code>ProjectileSpawnPoint</code> under the head.</li>
+<li><em>Sound is 2D</em> – set <code>Spatial Blend</code> to 1 on <em>TurretSoundManager</em>.</li>
+</ul>
+
+
+</body>
+</html>
